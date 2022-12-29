@@ -1,0 +1,32 @@
+stages:
+  - deploy
+  - test
+
+deploy-to-vercel:
+  stage: deploy
+  image: node:latest
+
+  script:
+    - npm i -g vercel
+    - DEPLOYMENT_URL=$(vercel -t $VERCEL_TOKEN --confirm)
+    - echo $DEPLOYMENT_URL >vercel_deployment_url.txt
+
+  artifacts:
+    when: on_success
+    paths:
+      - vercel_deployment_url.txt
+
+cypress_test:
+  image: cypress/browsers:node18.12.0-chrome107
+  stage: test
+
+  script:
+    - DEPLOYMENT_URL=$(cat vercel_deployment_url.txt)
+    - npm ci
+    - $(npm bin)/cypress run --env CYPRESS_BASE_URL=$DEPLOYMENT_URL
+
+  artifacts:
+    when: on_success
+    paths:
+      - cypress/screenshots
+      - cypress/videos
