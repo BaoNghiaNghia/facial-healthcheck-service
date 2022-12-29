@@ -46,9 +46,14 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/api/", apiRouter);
 
-// Crontab, will run every 15 minutes    */15 * * * *
-cronTab.schedule("*/15 * * * *", async () => {
+// Crontab, check server ai status
+cronTab.schedule(process.env.SERVICE_CHECKER_FREQUENCE, async () => {
 	await HealthcheckController.serviceAliveNoti();
+});
+
+// Crontab, check server camera status
+cronTab.schedule(process.env.CAM_CHECKER_FREQUENCE, async () => {
+	console.log('Camera checking...')
 });
 
 // throw 404 if URL not found
