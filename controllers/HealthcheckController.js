@@ -1,5 +1,6 @@
 const axios = require("axios");
 const apiResponse = require("../helpers/apiResponse");
+const telegram = require("../middlewares/telegram");
 const jwt = require("../middlewares/jwt");
 var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
@@ -7,7 +8,10 @@ mongoose.set("useFindAndModify", false);
 const serviceAliveNoti = async () => {
 	try {
 		await axios.get(`${process.env.FACIAL_SERVER_AI}/healthcheck`)
-			.then((dataRes) => console.log('---', dataRes.data)).catch((error) => {
+			.then(async (dataRes) =>  {
+				console.log('--- healthcheck cronjob ---', dataRes.data);
+				await telegram.sendNotification(dataRes.data);
+			}).catch((error) => {
 				console.log(error);
 			});
 	} catch (err) {
