@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axios": "^1.2.1",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.1.0",
     "codacy-coverage": "^3.4.0",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
