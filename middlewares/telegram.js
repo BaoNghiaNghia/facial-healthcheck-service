@@ -11,7 +11,7 @@ const sendNotification = (message) => {
             let data = {
                 chat_id: TELEGRAM_GROUP_ID,
                 parse_mode: "HTML",
-                text: `${message}`
+                text: message
             };
 
             axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, data)

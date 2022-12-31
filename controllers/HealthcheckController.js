@@ -9,13 +9,15 @@ const serviceAliveNoti = async () => {
 	try {
 		await axios.get(`${process.env.FACIAL_SERVER_AI}/healthcheck`)
 			.then(async (dataRes) =>  {
-				console.log('--- healthcheck cronjob ---', dataRes.data);
+				console.log('--- healthcheck cronjob ---', JSON.stringify(dataRes.data));
 				await telegram.sendNotification(dataRes.data);
-			}).catch((error) => {
+			}).catch(async (error) => {
+				await telegram.sendNotification(JSON.stringify(error));
 				console.log(error);
 			});
 	} catch (err) {
 		//throw error in json response with status 500. 
+		await telegram.sendNotification(err);
 		return apiResponse.ErrorResponse(res, err);
 	}
 }
@@ -24,7 +26,6 @@ const serviceAliveFunc = async (req, res) => {
 	try {
 		await axios.get(`${process.env.FACIAL_SERVER_AI}/healthcheck`)
 			.then((dataRes) => {
-				console.log('---- [] ----', dataRes.data)
 				return apiResponse.successResponseWithData(res,"Success", dataRes.data);
 			}).catch((error) => {
 				console.log(error);
