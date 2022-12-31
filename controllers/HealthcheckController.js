@@ -43,7 +43,6 @@ const serviceAliveFunc = async (req, res) => {
  * @returns {Object}
  */
 const serviceAlive = [
-	jwt,
 	serviceAliveFunc
 ];
 
