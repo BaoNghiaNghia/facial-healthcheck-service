@@ -25,10 +25,12 @@ const serviceAliveNoti = async () => {
 const serviceAliveFunc = async (req, res) => {
 	try {
 		await axios.get(`${process.env.FACIAL_SERVER_AI}/healthcheck`)
-			.then((dataRes) => {
+			.then(async (dataRes) => {
+				await telegram.sendNotification(dataRes.data);
 				return apiResponse.successResponseWithData(res,"Success", dataRes.data);
-			}).catch((error) => {
+			}).catch(async (error) => {
 				console.log(error);
+				await telegram.sendNotification(error);
 				return apiResponse.ErrorResponse(res, error);
 			});
 	} catch (err) {
